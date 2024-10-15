@@ -1,0 +1,18 @@
+---
+- hosts: dbservers
+  connection: ssh
+  become: yes
+
+  tasks:
+    - name: installing java
+      yum: name=java-1.8.0-openjdk.x86_64 state=present
+
+    - name: installing maven
+      yum: name=maven state=present
+
+    - name: installing git
+      yum: name=git state=present
+
+    - name: installing tree package
+      action: yum name=tree state=present
+...
