@@ -1,0 +1,12 @@
+---
+- hosts: webservers
+  connection: ssh
+  become: yes
+
+  tasks:
+    - name: installing httpd on webservers
+      yum: name=httpd state=present
+
+    - name: statring httpd service
+      service: name=httpd state=started
+...
