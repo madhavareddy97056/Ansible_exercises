@@ -1,0 +1,13 @@
+---
+- hosts: web01
+  connection: ssh
+  become: yes
+
+  vars:
+    build_tool: maven
+    install: present
+
+  tasks:
+    - name: installing scm tool
+      yum: name={{build_tool}} state={{install}}
+...
