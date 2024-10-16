@@ -1,0 +1,13 @@
+---
+- hosts: db01
+  connection: ssh
+  become: yes
+
+  tasks:
+    - name: to create users
+      group: name={{item}} state=present
+      loop:
+        - fb
+        - insta
+        - whatsapp
+...
