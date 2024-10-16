@@ -1,0 +1,9 @@
+---
+- hosts: web01
+  connection: ssh
+  become: yes
+
+  tasks:
+    - name: create a folder
+      file: path="reddy" state=directory
+...
