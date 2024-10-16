@@ -1,0 +1,16 @@
+---
+- hosts: web01
+  connection: ssh
+  become: yes
+
+  tasks:
+    - name: create file
+      file: path='reddy/madhava' state=touch
+
+    - name: add content to file
+      copy:
+        dest: "reddy/madhava"
+        content: |
+          hi all
+          this is test
+...
