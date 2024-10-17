@@ -9,7 +9,7 @@
 
     - name: fetching code from private github repository
       git:
-        repo: "https://ghp_NZNhpslzXPkiSM1zMLomBrB8C22dXXb@github.com/madhavareddy97056/flm_Tomcat_demo_repo.git" # syntax: https://token@repo_link
+        repo: "https://<token>@github.com/madhavareddy97056/flm_Tomcat_demo_repo.git" # syntax: https://token@repo_link
         dest: "/root/one"
         version: "madhava" #branch name
 
