@@ -1,0 +1,21 @@
+---
+- hosts: web01
+  connection: ssh
+  become: yes
+
+  tasks:
+    - name: installing git
+      yum: name=git state=present
+
+    - name: fetching code from private github repository
+      git:
+        repo: "https://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@github.com/madhavareddy97056/flm_Tomcat_demo_repo.git" # syntax: https://token@repo_link
+        dest: "/root/one"
+        version: "madhava" #branch name
+
+    - name: fetching code from public github repository
+      git:
+        repo: "https://github.com/madhavareddy97056/flm_Tomcat_demo_repo.git"
+        dest: "/root/one"
+        version: "madhava" #branch name
+...
