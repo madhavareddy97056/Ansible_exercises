@@ -1,0 +1,20 @@
+---
+- hosts: web01
+  connection: ssh
+  become: yes
+
+  tasks:
+    - name: creating user
+      user: name=reddy state=present
+
+    - name: creating group
+      group: name=bonam state=present
+
+    - name: creating file
+      file:
+        path: "/root/hello-world.sh"
+        state: touch
+        owner: reddy
+        group: bonam
+        mode: '777'
+...
