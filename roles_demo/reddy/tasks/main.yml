@@ -1,0 +1,7 @@
+---
+- name: installing jenkins
+  yum: name=jenkins state=present
+
+- name: starting jenkins
+  systemd: name=jenkins state=started
+...

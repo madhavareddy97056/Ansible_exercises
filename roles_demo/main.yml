@@ -1,0 +1,10 @@
+---
+- hosts: web01
+  connection: ssh
+  become: yes
+
+  roles:
+    - bmr
+    - madhava
+    - reddy
+...
