@@ -1,0 +1,31 @@
+---
+- hosts: all
+  connection: ssh
+  become: yes
+
+  tasks:
+    - name: installing package loop in centos
+      yum:
+        name: "{{item}}"
+        state: present
+      when: ansible_distribution == "CentOS"
+      loop:
+        - chrony
+        - git
+        - wget
+        - zip
+        - unzip
+
+    - name: installing package in loop in ubuntu
+      apt:
+        name: "{{item}}"
+        state: present
+        update_cache: yes
+      when: ansible_distribution == "Ubuntu"
+      loop:
+        - ntp
+        - git
+        - wget
+        - zip
+        - unzip
+...
