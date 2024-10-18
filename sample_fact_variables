@@ -1,0 +1,18 @@
+---
+- hosts: all
+  connection: ssh
+  become: yes
+
+  tasks:
+    - name: printing os distribution
+      debug:
+        var: ansible_distribution
+
+    - name: printing ram
+      debug:
+        var: ansible_memory_mb.real.free
+
+    - name: printing processor name
+      debug:
+        var: ansible_processor[2]
+...
