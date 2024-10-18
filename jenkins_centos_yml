@@ -1,0 +1,25 @@
+---
+- hosts: db01
+  connection: ssh
+  become: yes
+
+  tasks:
+    - name: installing java17
+      yum: name=java-17-openjdk state=present
+
+    - name: setting jenkins repo
+      get_url:
+        url: "https://pkg.jenkins.io/redhat-stable/jenkins.repo"
+        dest: "/etc/yum.repos.d/jenkins.repo"
+
+    - name: importing jenkins.io key
+      rpm_key:
+        key: "https://pkg.jenkins.io/redhat-stable/jenkins.io-2023.key"
+        state: present
+
+    - name: installing jenkins
+      yum: name=jenkins state=present
+
+    - name: starting jenkins service
+      systemd: name=jenkins state=started
+...
