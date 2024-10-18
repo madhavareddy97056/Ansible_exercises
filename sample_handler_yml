@@ -1,0 +1,14 @@
+---
+- hosts: db01
+  connection: ssh
+  become: yes
+
+  tasks:
+    - name: installing httpd
+      yum: name=httpd state=present
+      notify: start httpd
+
+  handlers:
+    - name: start httpd
+      service: name=httpd state=started
+...
