@@ -1,0 +1,64 @@
+---
+- name: webserver httpd setup
+  hosts: web01
+  connection: ssh
+  become: yes
+
+  tasks:
+    - name: installing httpd
+      yum: name=httpd state=present
+
+    - name: starting and enabling httpd service
+      service:
+        name: httpd
+        state: started
+        enabled: yes
+
+
+- name: dbserver setup
+  hosts: db01
+  connection: ssh
+  become: yes
+
+  tasks:
+    - name: installing mariadb
+      yum: name=mariadb-server state=present
+
+    - name: starting and enabling mariadb service
+      service:
+        name: mariadb
+        state: started
+        enabled: yes
+...
+---
+- name: webserver httpd setup
+  hosts: web01
+  connection: ssh
+  become: yes
+
+  tasks:
+    - name: installing httpd
+      yum: name=httpd state=present
+
+    - name: starting and enabling httpd service
+      service:
+        name: httpd
+        state: started
+        enabled: yes
+
+
+- name: dbserver setup
+  hosts: db01
+  connection: ssh
+  become: yes
+
+  tasks:
+    - name: installing mariadb
+      yum: name=mariadb-server state=present
+
+    - name: starting and enabling mariadb service
+      service:
+        name: mariadb
+        state: started
+        enabled: yes
+...
