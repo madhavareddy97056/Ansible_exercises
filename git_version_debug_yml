@@ -1,0 +1,16 @@
+---
+- hosts: web01
+  connection: ssh
+  become: yes
+
+  tasks:
+    - name: installing git
+      yum: name=git state=present
+
+    - name: git version
+      command: git --version
+      register: git_version_is
+
+    - debug:
+        msg: "Git version in slave is: {{git_version_is.stdout}}"
+...
