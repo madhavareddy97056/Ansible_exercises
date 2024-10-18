@@ -1,0 +1,24 @@
+---
+- hosts: web01
+  become: yes
+  connection: ssh
+
+  vars:
+    usrnm: apple
+    cmt: user created with palybook vars
+
+  tasks:
+    - name: creating user
+      user:
+        name: "{{usrnm}}"
+        comment: "{{cmt}}"
+        state: present
+      register: local_vars
+
+    - debug:
+        var: local_vars.name
+
+    - debug:
+        var: local_vars.comment
+
+...
