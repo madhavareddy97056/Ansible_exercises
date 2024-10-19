@@ -1,0 +1,11 @@
+---
+- hosts: web01
+  connection: ssh
+  become: yes
+
+  tasks:
+    - name: updateing content of a file in web01
+      copy:
+        content: "updated content in bmr"
+        dest: "/root/bmr"
+...
