@@ -1,0 +1,101 @@
+---
+- hosts: all
+  connection: ssh
+  become: yes
+
+
+  tasks:
+    - name: Installing java11
+      yum: name=java-11-openjdk state=present
+
+    - name: Create a tomcat group
+      group: name=tomcat state=present
+
+    - name: Create a tomcat user
+      user: name=tomcat state=present
+
+    - name: Download Tomcat
+      get_url:
+        url: https://dlcdn.apache.org/tomcat/tomcat-9/v9.0.96/bin/apache-tomcat-9.0.96.tar.gz
+        dest: /tmp/apache-tomcat-9.0.96.tar.gz
+
+    - name: Create Tomcat directory
+      file:
+        path: "/opt/tomcat"
+        state: directory
+        owner: tomcat
+        group: tomcat
+        mode: '0755'
+
+    - name: Extract Tomcat
+      unarchive:
+        src: /tmp/apache-tomcat-9.0.96.tar.gz
+        dest: /opt/tomcat
+        owner: tomcat
+        group: tomcat
+        remote_src: yes
+
+    - name: copying tomcat users xml file
+      template:
+        src: "tomcat-users.xml"
+        dest: "/opt/tomcat/apache-tomcat-9.0.96/conf/tomcat-users.xml"
+
+    - name: copying context.xml file
+      template:
+        src: "context.xml"
+        dest: "/opt/tomcat/apache-tomcat-9.0.96/webapps/manager/META-INF/context.xml"
+
+    - name: Set permissions for Tomcat folders
+      file:
+        path: "{{ item }}"
+        state: directory
+        owner: tomcat
+        group: tomcat
+      loop:
+        - /opt/tomcat/apache-tomcat-9.0.96
+        - /opt/tomcat/apache-tomcat-9.0.96/conf
+        - /opt/tomcat/apache-tomcat-9.0.96/logs
+        - /opt/tomcat/apache-tomcat-9.0.96/temp
+        - /opt/tomcat/apache-tomcat-9.0.96/webapps
+        - /opt/tomcat/apache-tomcat-9.0.96/work
+
+    - name: Create Tomcat service file
+      copy:
+        dest: /etc/systemd/system/tomcat.service
+        content: |
+          [Unit]
+          Description=Apache Tomcat Web Application Container
+          After=network.target
+
+          [Service]
+          Type=forking
+
+          Environment=JAVA_HOME=/usr/lib/jvm/jre-11-openjdk-11.0.20.1.1-2.el9.x86_64
+          Environment=CATALINA_PID=/opt/tomcat/apache-tomcat-9.0.96/temp/tomcat.pid
+          Environment=CATALINA_HOME=/opt/tomcat/apache-tomcat-9.0.96
+          Environment=CATALINA_BASE=/opt/tomcat/apache-tomcat-9.0.96
+          Environment='CATALINA_OPTS=-Xms512M -Xmx1024M -server -XX:+UseParallelGC'
+          Environment='JAVA_OPTS=-Djava.awt.headless=true -Djava.security.egd=file:/dev/./urandom'
+
+          ExecStart=/opt/tomcat/apache-tomcat-9.0.96/bin/startup.sh
+          ExecStop=/opt/tomcat/apache-tomcat-9.0.96/bin/shutdown.sh
+
+          User=tomcat
+          Group=tomcat
+          UMask=0007
+          RestartSec=10
+          Restart=always
+
+          [Install]
+          WantedBy=multi-user.target
+
+    - name: Reload systemd daemon
+      command: systemctl daemon-reload
+
+    - name: Enable Tomcat service
+      systemd:
+        name: tomcat
+        enabled: yes
+
+    - name: Start Tomcat service
+      service: name=tomcat state=started
