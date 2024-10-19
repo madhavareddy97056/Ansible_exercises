@@ -1,5 +1,5 @@
 [defaults]
-Host-key_Checking = False
+Host_key_Checking = False
 inventory = ./inventory
 Forks = 5
 log_path = /var/log/ansible.log
