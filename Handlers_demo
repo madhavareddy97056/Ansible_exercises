@@ -1,0 +1,29 @@
+---
+- hosts: web01
+  connection: ssh
+  become: yes
+
+  tasks:
+    - name: installing httpd service
+      yum:
+        name: httpd
+        state: present
+
+    - name: starting httpd service
+      service:
+        name: httpd
+        state: started
+        enabled: yes
+
+    - name: Copying index.html file
+      copy:
+        src: /root/ansible_demo/index.html
+        dest: "/var/www/html/index.html"
+      notify: restart httpd
+
+  handlers:
+    - name: restart httpd
+      service:
+        name: httpd
+        state: restarted
+...
